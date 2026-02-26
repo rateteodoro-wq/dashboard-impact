@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard IMPACT</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden-smooth {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8 flex justify-center items-start">
+    <div
+        class="w-full max-w-3xl bg-white shadow-2xl shadow-indigo-100 rounded-3xl p-6 md:p-12 fade-in mt-4 border border-slate-100">
+
+        <header class="text-center mb-10 border-b border-slate-100 pb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-3 font-serif tracking-tight">Dashboard IMPACT
+            </h1>
+            <p class="text-slate-500 text-sm md:text-base max-w-lg mx-auto">Priorização inteligente baseada na sua
+                energia e esforço necessário para criar resultados.</p>
+        </header>
+
+        <!-- Formulário (Entradas de Dados) -->
+        <div id="form-section">
+            <div class="mb-10 p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                <label for="energia" class="block text-sm font-semibold text-slate-700 mb-3">Sua Energia Atual</label>
+                <div class="relative">
+                    <select id="energia"
+                        class="appearance-none w-full bg-white border border-slate-300 text-slate-800 text-base rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block p-4 pr-10 shadow-sm transition-all outline-none font-medium cursor-pointer">
+                        <option value="Alta">⚡ Alta (Pronto para desafios difíceis)</option>
+                        <option value="Media" selected>⚖️ Média (Focado em custo-benefício)</option>
+                        <option value="Baixa">🔋 Baixa (Precisando de vitórias rápidas)</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-5">
+                    <h2 class="text-xl font-bold text-slate-800 font-serif">Suas Tarefas</h2>
+                </div>
+
+                <div id="tasks-container" class="space-y-4">
+                    <!-- Linha de Tarefa Base -->
+                    <div
+                        class="task-row flex flex-col md:flex-row gap-4 p-5 py-6 border border-slate-200 rounded-2xl bg-white shadow-sm hover:border-indigo-300 transition-colors relative group">
+                        <div class="flex-grow">
+                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Tarefa
+                                *</label>
+                            <input type="text"
+                                class="task-name w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all placeholder-slate-400"
+                                placeholder="Ex: Escrever relatório mensal..." required>
+                        </div>
+                        <div class="w-full md:w-32">
+                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Impacto
+                                <span class="text-[10px] font-normal lowercase">(1-10)</span></label>
+                            <input type="number" min="1" max="10"
+                                class="task-impact w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all text-center"
+                                value="5" required>
+                        </div>
+                        <div class="w-full md:w-32">
+                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Esforço
+                                <span class="text-[10px] font-normal lowercase">(1-10)</span></label>
+                            <input type="number" min="1" max="10"
+                                class="task-effort w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all text-center"
+                                value="5" required>
+                        </div>
+                        <button type="button"
+                            class="remove-task absolute top-2 right-2 text-slate-300 hover:text-red-500 transition-colors p-2 md:static md:self-end md:mb-1.5 md:opacity-0 group-hover:opacity-100 flex-shrink-0 focus:opacity-100 rounded-lg outline-none"
+                            title="Remover tarefa" onclick="this.parentElement.remove()">
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <button id="add-task-btn"
+                        class="inline-flex items-center text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 py-2.5 px-5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <svg class="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Adicionar nova linha
+                    </button>
+                </div>
+            </div>
+
+            <button id="prioritize-btn"
+                class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-5 px-6 rounded-2xl shadow-xl hover:shadow-2xl shadow-slate-300 transform transition hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-slate-400 text-lg flex justify-center items-center mt-10">
+                <span>Priorizar Minhas Tarefas</span>
+                <svg class="ml-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Tela de Resultados (Saída de Dados) -->
+        <div id="results-section" class="hidden-smooth">
+            <div class="text-center mb-10">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-5 shadow-inner">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-800 font-serif mb-3">Seus Próximos Passos Absolutos</h2>
+                <p class="text-slate-500 max-w-md mx-auto">O motor calculou a matriz de prioridade baseada na sua
+                    energia e relação impacto vs. esforço.</p>
+            </div>
+
+            <div id="results-container" class="space-y-6 mb-10">
+                <!-- Cards de resultados serão injetados via JS -->
+            </div>
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <a href="#"
+                    class="flex justify-center items-center gap-2 bg-white border border-slate-200 hover:border-indigo-400 hover:text-indigo-600 text-slate-700 font-bold py-4 px-6 rounded-xl shadow-sm hover:shadow text-center transition-all">
+                    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M4.459 4.208c.745-.636 1.83-.889 3.093-.889h6.126c2.408 0 4.09 1.157 5.097 2.723l.115.186c.338.563.541 1.205.617 1.874l.019.227v9.423c0 1.24-.26 2.373-.918 3.133-.746.862-1.928 1.115-3.192 1.115H9.3c-2.408 0-4.09-1.157-5.098-2.723a4.7 4.7 0 0 1-.722-2.02l-.013-.208v-9.5c0-1.22.257-2.336.907-3.085zm10.74 3.792h-5.41a.75.75 0 0 0-.75.75v5.41a.75.75 0 0 0 1.5 0V10.12l4.13 4.13a.75.75 0 0 0 1.06-1.06l-4.13-4.13h3.6a.75.75 0 0 0 0-1.5z" />
+                    </svg>
+                    Adicionar ao Meu Notion
+                </a>
+                <button id="new-session-btn"
+                    class="flex justify-center items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-indigo-500/30 text-center transition-all focus:ring-4 focus:ring-indigo-300">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                        </path>
+                    </svg>
+                    Nova Sessão
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formSection = document.getElementById('form-section');
+            const resultsSection = document.getElementById('results-section');
+            const tasksContainer = document.getElementById('tasks-container');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const prioritizeBtn = document.getElementById('prioritize-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const newSessionBtn = document.getElementById('new-session-btn');
+            const energiaSelect = document.getElementById('energia');
+
+            const createTaskRow = () => {
+                const row = document.createElement('div');
+                row.className = 'task-row flex flex-col md:flex-row gap-4 p-5 py-6 border border-slate-200 rounded-2xl bg-white shadow-sm hover:border-indigo-300 transition-all relative group fade-in';
+                row.innerHTML = `
+                    <div class="flex-grow">
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Tarefa *</label>
+                        <input type="text" class="task-name w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all placeholder-slate-400" placeholder="Ex: Nova tarefa..." required>
+                    </div>
+                    <div class="w-full md:w-32">
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Impacto <span class="text-[10px] font-normal lowercase">(1-10)</span></label>
+                        <input type="number" min="1" max="10" class="task-impact w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all text-center" value="5" required>
+                    </div>
+                    <div class="w-full md:w-32">
+                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wide">Esforço <span class="text-[10px] font-normal lowercase">(1-10)</span></label>
+                        <input type="number" min="1" max="10" class="task-effort w-full bg-slate-50 border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base p-3 border outline-none transition-all text-center" value="5" required>
+                    </div>
+                    <button type="button" class="remove-task absolute top-2 right-2 md:static md:self-end md:mb-1.5 text-slate-300 hover:text-red-500 md:opacity-0 group-hover:opacity-100 transition-all p-2 flex-shrink-0 focus:opacity-100 rounded-lg outline-none" title="Remover tarefa" onclick="this.parentElement.remove()">
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                `;
+                return row;
+            };
+
+            addTaskBtn.addEventListener('click', () => {
+                const newRow = createTaskRow();
+                tasksContainer.appendChild(newRow);
+                newRow.querySelector('.task-name').focus();
+            });
+
+            prioritizeBtn.addEventListener('click', () => {
+                const energia = energiaSelect.value;
+                const taskRows = document.querySelectorAll('.task-row');
+                let tasks = [];
+                let isValid = true;
+
+                taskRows.forEach(row => {
+                    const nameInput = row.querySelector('.task-name');
+                    const impactInput = row.querySelector('.task-impact');
+                    const effortInput = row.querySelector('.task-effort');
+
+                    const name = nameInput.value.trim();
+                    const impact = parseFloat(impactInput.value);
+                    const effort = parseFloat(effortInput.value);
+
+                    // Validação simples
+                    if (!name) {
+                        nameInput.classList.add('border-red-400', 'bg-red-50');
+                        isValid = false;
+                    } else {
+                        nameInput.classList.remove('border-red-400', 'bg-red-50');
+                    }
+
+                    if (isNaN(impact) || impact < 1 || impact > 10) {
+                        impactInput.classList.add('border-red-400', 'bg-red-50');
+                        isValid = false;
+                    } else {
+                        impactInput.classList.remove('border-red-400', 'bg-red-50');
+                    }
+
+                    if (isNaN(effort) || effort < 1 || effort > 10) {
+                        effortInput.classList.add('border-red-400', 'bg-red-50');
+                        isValid = false;
+                    } else {
+                        effortInput.classList.remove('border-red-400', 'bg-red-50');
+                    }
+
+                    if (name && !isNaN(impact) && !isNaN(effort)) {
+                        // Cálculos matemáticos requeridos
+                        const ratio = impact / effort;
+                        const tempoEstimado = effort * 5;
+                        tasks.push({ name, impact, effort, ratio, tempoEstimado });
+                    }
+                });
+
+                if (!isValid) {
+                    alert("Atenção: Preencha todas as tarefas e certifique-se que Impacto e Esforço são valores de 1 a 10.");
+                    return;
+                }
+
+                if (tasks.length === 0) {
+                    alert("Adicione pelo menos uma tarefa para priorizar.");
+                    return;
+                }
+
+                // Regras de ordenação matemática
+                tasks.sort((a, b) => {
+                    if (energia === "Alta") {
+                        // Alta: Priorizando maior impacto, desempate por maior ratio
+                        if (b.impact !== a.impact) return b.impact - a.impact;
+                        return b.ratio - a.ratio;
+                    } else if (energia === "Baixa") {
+                        // Baixa: Priorizando menor esforço, desempate por maior ratio
+                        if (a.effort !== b.effort) return a.effort - b.effort;
+                        return b.ratio - a.ratio;
+                    } else {
+                        // Média: Ordenando estritamente pelo maior Ratio (Impacto/Esforço)
+                        if (b.ratio !== a.ratio) return b.ratio - a.ratio;
+                        return b.impact - a.impact; // Desempate natural extra
+                    }
+                });
+
+                // Top 3
+                const topTasks = tasks.slice(0, 3);
+                resultsContainer.innerHTML = '';
+
+                topTasks.forEach((task, index) => {
+                    // Justificativas do motor
+                    let priorizadoPor = "";
+                    if (energia === "Alta") {
+                        priorizadoPor = "Alta energia detectada. Foco em alto impacto absoluto.";
+                    } else if (energia === "Baixa") {
+                        priorizadoPor = "Baixa energia. Tarefa de baixo esforço para gerar momentum.";
+                    } else {
+                        priorizadoPor = "Energia equilibrada. Maior retorno (Impacto/Esforço) selecionado.";
+                    }
+
+                    const themeColors = [
+                        'border-l-[6px] border-indigo-600',
+                        'border-l-[6px] border-slate-400',
+                        'border-l-[6px] border-amber-500'
+                    ];
+
+                    const card = document.createElement('div');
+                    card.className = `p-6 bg-white rounded-2xl shadow-md border border-slate-100 ${themeColors[index]} flex flex-col md:flex-row md:items-center justify-between gap-5 opacity-0`;
+                    card.style.animation = `fadeIn 0.5s ease-out ${index * 0.15 + 0.3}s forwards`;
+
+                    card.innerHTML = `
+                        <div class="flex-grow">
+                            <div class="flex flex-wrap items-center gap-3 mb-2">
+                                <span class="text-[11px] font-bold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md uppercase tracking-wider">${index + 1}º Passo</span>
+                                <span class="text-xs font-semibold text-slate-500 flex items-center bg-slate-50 px-2.5 py-1 rounded-md">
+                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Foco exigido: ${task.tempoEstimado} minutos
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-serif leading-tight mt-1 mb-3">${task.name}</h3>
+                            <p class="text-sm font-medium text-slate-600 bg-slate-50/80 p-3 rounded-lg border border-slate-100 italic">
+                                ✨ Priorizado por: ${priorizadoPor}
+                            </p>
+                        </div>
+                        <div class="hidden md:flex flex-col items-center justify-center p-4 bg-slate-50 rounded-xl min-w-[100px] border border-slate-100">
+                            <span class="text-2xl font-black text-slate-800">${task.ratio.toFixed(1)}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Ratio</span>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+
+                // Transição suave Form -> Resultados
+                formSection.style.opacity = '0';
+                setTimeout(() => {
+                    formSection.style.display = 'none';
+                    resultsSection.style.display = 'block';
+                    setTimeout(() => {
+                        resultsSection.style.opacity = '1';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 50);
+                }, 400);
+            });
+
+            newSessionBtn.addEventListener('click', () => {
+                // Resetar formulário
+                const taskRows = document.querySelectorAll('.task-row');
+                taskRows.forEach((row, index) => {
+                    if (index > 0) {
+                        row.remove(); // Manter apenas a primeira
+                    } else {
+                        row.querySelector('.task-name').value = '';
+                        row.querySelector('.task-impact').value = '5';
+                        row.querySelector('.task-effort').value = '5';
+                    }
+                });
+                energiaSelect.value = 'Media';
+
+                // Transição suave Resultados -> Form
+                resultsSection.style.opacity = '0';
+                setTimeout(() => {
+                    resultsSection.style.display = 'none';
+                    formSection.style.display = 'block';
+                    setTimeout(() => {
+                        formSection.style.opacity = '1';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 50);
+                }, 400);
+            });
+        });
+    </script>
+</body>
+
+</html>
